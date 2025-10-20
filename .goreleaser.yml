@@ -40,7 +40,8 @@ builds:
 
 archives:
   - id: gcloud-switcher-archive
-    format: tar.gz
+    formats:
+      - tar.gz
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -48,20 +49,29 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    format_overrides:
-      - goos: windows
-        format: zip
     files:
       - README.md
       - LICENSE
-      - COMPLETION.md
+  - id: gcloud-switcher-windows
+    formats:
+      - zip
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    rlcp: true
+    files:
+      - README.md
+      - LICENSE
 
 checksum:
   name_template: 'checksums.txt'
   algorithm: sha256
 
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version: "{{ incpatch .Version }}-next"
 
 changelog:
   sort: asc
