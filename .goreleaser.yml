@@ -1,0 +1,244 @@
+# GoReleaser configuration for gcloud-switcher
+# See: https://goreleaser.com
+
+version: 2
+
+before:
+  hooks:
+    # Ensure dependencies are up to date
+    - go mod tidy
+
+builds:
+  - id: gcloud-switcher
+    main: ./cmd/gcloud-switcher
+    binary: gcloud-switcher
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    goarm:
+      - "6"
+      - "7"
+    ignore:
+      # Skip ARM builds for Windows
+      - goos: windows
+        goarch: arm
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+      - -X main.builtBy=goreleaser
+
+archives:
+  - id: gcloud-switcher-archive
+    format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+      - COMPLETION.md
+
+checksum:
+  name_template: 'checksums.txt'
+  algorithm: sha256
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+      - '^style:'
+      - 'Merge pull request'
+      - 'Merge branch'
+  groups:
+    - title: 'New Features'
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: 'Bug Fixes'
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: 'Performance Improvements'
+      regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: 'Refactors'
+      regexp: '^.*?refactor(\([[:word:]]+\))??!?:.+$'
+      order: 3
+    - title: 'Other Changes'
+      order: 999
+
+# Homebrew tap for macOS/Linux users
+brews:
+  - name: gcloud-switcher
+    repository:
+      owner: yourusername
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    homepage: "https://github.com/yourusername/gcloud-switch"
+    description: "A CLI tool to simplify switching between multiple GCloud configurations and projects"
+    license: "MIT"
+    folder: Formula
+    dependencies:
+      - name: gcloud
+        type: optional
+    install: |
+      bin.install "gcloud-switcher"
+      
+      # Install shell completions
+      bash_completion.install "completions/gcloud-switcher.bash" => "gcloud-switcher"
+      zsh_completion.install "completions/_gcloud-switcher"
+      fish_completion.install "completions/gcloud-switcher.fish"
+    test: |
+      system "#{bin}/gcloud-switcher --version"
+
+# Scoop bucket for Windows users
+scoop:
+  bucket:
+    owner: yourusername
+    name: scoop-bucket
+    token: "{{ .Env.SCOOP_BUCKET_GITHUB_TOKEN }}"
+  homepage: "https://github.com/yourusername/gcloud-switch"
+  description: "A CLI tool to simplify switching between multiple GCloud configurations and projects"
+  license: MIT
+
+# AUR package for Arch Linux users
+aurs:
+  - name: gcloud-switcher-bin
+    homepage: "https://github.com/yourusername/gcloud-switch"
+    description: "A CLI tool to simplify switching between multiple GCloud configurations and projects"
+    maintainers:
+      - 'Your Name <your.email@example.com>'
+    license: MIT
+    private_key: '{{ .Env.AUR_KEY }}'
+    git_url: 'ssh://aur@aur.archlinux.org/gcloud-switcher-bin.git'
+    package: |-
+      # bin
+      install -Dm755 "./gcloud-switcher" "${pkgdir}/usr/bin/gcloud-switcher"
+      
+      # license
+      install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/gcloud-switcher/LICENSE"
+      
+      # completions
+      mkdir -p "${pkgdir}/usr/share/bash-completion/completions/"
+      mkdir -p "${pkgdir}/usr/share/zsh/site-functions/"
+      mkdir -p "${pkgdir}/usr/share/fish/vendor_completions.d/"
+      
+      install -Dm644 "./completions/gcloud-switcher.bash" "${pkgdir}/usr/share/bash-completion/completions/gcloud-switcher"
+      install -Dm644 "./completions/_gcloud-switcher" "${pkgdir}/usr/share/zsh/site-functions/_gcloud-switcher"
+      install -Dm644 "./completions/gcloud-switcher.fish" "${pkgdir}/usr/share/fish/vendor_completions.d/gcloud-switcher.fish"
+
+# Docker images
+dockers:
+  - image_templates:
+      - "yourusername/gcloud-switcher:{{ .Version }}-amd64"
+      - "yourusername/gcloud-switcher:latest-amd64"
+    use: buildx
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+
+  - image_templates:
+      - "yourusername/gcloud-switcher:{{ .Version }}-arm64"
+      - "yourusername/gcloud-switcher:latest-arm64"
+    use: buildx
+    goarch: arm64
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+
+docker_manifests:
+  - name_template: "yourusername/gcloud-switcher:{{ .Version }}"
+    image_templates:
+      - "yourusername/gcloud-switcher:{{ .Version }}-amd64"
+      - "yourusername/gcloud-switcher:{{ .Version }}-arm64"
+
+  - name_template: "yourusername/gcloud-switcher:latest"
+    image_templates:
+      - "yourusername/gcloud-switcher:latest-amd64"
+      - "yourusername/gcloud-switcher:latest-arm64"
+
+# Release notes template
+release:
+  github:
+    owner: yourusername
+    name: gcloud-switch
+  draft: false
+  prerelease: auto
+  mode: append
+  header: |
+    ## GCloud Switcher {{ .Version }}
+    
+    Release Date: {{ .Date }}
+    
+    ### Installation
+    
+    #### Homebrew (macOS/Linux)
+    ```bash
+    brew install yourusername/tap/gcloud-switcher
+    ```
+    
+    #### Scoop (Windows)
+    ```powershell
+    scoop bucket add yourusername https://github.com/yourusername/scoop-bucket
+    scoop install gcloud-switcher
+    ```
+    
+    #### Go Install
+    ```bash
+    go install github.com/yourusername/gcloud-switch/cmd/gcloud-switcher@{{ .Version }}
+    ```
+    
+    #### Manual Download
+    Download the appropriate binary for your platform from the assets below.
+  footer: |
+    **Full Changelog**: https://github.com/yourusername/gcloud-switch/compare/{{ .PreviousTag }}...{{ .Tag }}
+    
+    ---
+    
+    ### Shell Completion
+    
+    After installation, set up shell completion:
+    ```bash
+    # Bash
+    gcloud-switcher completion bash | sudo tee /etc/bash_completion.d/gcloud-switcher
+    
+    # Zsh
+    gcloud-switcher completion zsh > "${fpath[1]}/_gcloud-switcher"
+    
+    # Fish
+    gcloud-switcher completion fish > ~/.config/fish/completions/gcloud-switcher.fish
+    ```
+    
+    See [COMPLETION.md](https://github.com/yourusername/gcloud-switch/blob/main/COMPLETION.md) for detailed setup instructions.
