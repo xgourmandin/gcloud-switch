@@ -127,21 +127,3 @@ release:
     Download the appropriate binary for your platform from the assets below.
   footer: |
     **Full Changelog**: https://github.com/xgourmandin/gcloud-switch/compare/{{ .PreviousTag }}...{{ .Tag }}
-    
-    ---
-    
-    ### Shell Completion
-    
-    After installation, set up shell completion:
-    ```bash
-    # Bash
-    gcloud-switcher completion bash | sudo tee /etc/bash_completion.d/gcloud-switcher
-    
-    # Zsh
-    gcloud-switcher completion zsh > "${fpath[1]}/_gcloud-switcher"
-    
-    # Fish
-    gcloud-switcher completion fish > ~/.config/fish/completions/gcloud-switcher.fish
-    ```
-    
-    See [COMPLETION.md](https://github.com/xgourmandin/gcloud-switch/blob/main/COMPLETION.md) for detailed setup instructions.

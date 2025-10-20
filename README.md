@@ -156,8 +156,6 @@ gcloud-switcher completion fish > ~/.config/fish/completions/gcloud-switcher.fis
 gcloud-switcher completion powershell | Out-String | Invoke-Expression
 ```
 
-For detailed setup instructions, see [COMPLETION.md](COMPLETION.md).
-
 ## Configuration Storage
 
 Configurations are stored in `~/.gcloud-switcher/config.json` as a JSON file containing:
