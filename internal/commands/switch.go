@@ -12,8 +12,8 @@ import (
 var switchCmd = &cobra.Command{
 	Use:   "switch <name>",
 	Short: "Switch to the specified GCloud configuration",
-	Long: `Switch to a predefined GCloud configuration. This will set the project 
-and handle authentication automatically, reusing stored credentials when possible.`,
+	Long: `Switch to a predefined GCloud configuration. This will activate the gcloud 
+configuration and handle authentication automatically, reusing stored credentials when possible.`,
 	Args:              cobra.ExactArgs(1),
 	ValidArgsFunction: GetConfigNames,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -31,16 +31,60 @@ and handle authentication automatically, reusing stored credentials when possibl
 
 		logger.Info("Switching to configuration", "name", cfg.Name, "project_id", cfg.ProjectID)
 
-		// Set the project
-		if err := gcloud.SetProject(cfg.ProjectID); err != nil {
+		// Step 1: Save ADC of current active configuration (if any)
+		if store.ActiveConfig != "" && store.ActiveConfig != configName {
+			currentCfg, err := store.FindConfig(store.ActiveConfig)
+			if err == nil {
+				adcPath, err := config.GetADCFileForConfig(store.ActiveConfig)
+				if err == nil {
+					logger.Info("Saving ADC for current configuration", "name", store.ActiveConfig)
+					if err := gcloud.SaveADC(adcPath); err != nil {
+						logger.Warning("Failed to save ADC", "error", err)
+					} else {
+						currentCfg.ADCPath = adcPath
+					}
+				}
+			}
+		}
+
+		// Step 2: Ensure gcloud configuration exists, create if not
+		if !gcloud.ConfigurationExists(configName) {
+			logger.Info("Creating new gcloud configuration", "name", configName)
+			if err := gcloud.CreateConfiguration(configName); err != nil {
+				return fmt.Errorf("failed to create gcloud configuration: %w", err)
+			}
+		}
+
+		// Step 3: Activate the gcloud configuration
+		logger.Info("Activating gcloud configuration", "name", configName)
+		if err := gcloud.ActivateConfiguration(configName); err != nil {
 			return err
 		}
-		logger.Success("Project set successfully")
+		logger.Success("Configuration activated")
 
-		// Check if we need to authenticate
-		needsAuth := !gcloud.CheckADCValid()
+		// Step 4: Restore ADC if available for this configuration
+		if cfg.ADCPath != "" {
+			logger.Info("Restoring saved ADC credentials", "name", configName)
+			if err := gcloud.RestoreADC(cfg.ADCPath); err != nil {
+				logger.Warning("Failed to restore ADC", "error", err)
+			} else {
+				logger.Success("ADC credentials restored")
+			}
+		}
+
+		// Step 5: Check if we need to authenticate (check both account and ADC)
+		logger.Info("Checking authentication status...")
+		accountValid := gcloud.CheckAccountValid()
+		adcValid := gcloud.CheckADCValid()
+		needsAuth := !accountValid || !adcValid
 
 		if needsAuth {
+			if !accountValid {
+				logger.Info("Account credentials are invalid or expired")
+			}
+			if !adcValid {
+				logger.Info("ADC credentials are invalid or expired")
+			}
 			logger.Info("Authentication required...")
 
 			if cfg.ServiceAccount != "" {
@@ -55,9 +99,25 @@ and handle authentication automatically, reusing stored credentials when possibl
 				}
 			}
 			logger.Success("Authentication successful")
+
+			// Save the new ADC credentials
+			adcPath, err := config.GetADCFileForConfig(configName)
+			if err == nil {
+				if err := gcloud.SaveADC(adcPath); err != nil {
+					logger.Warning("Failed to save new ADC", "error", err)
+				} else {
+					cfg.ADCPath = adcPath
+				}
+			}
 		} else {
 			logger.Success("Using existing valid credentials")
 		}
+
+		// Step 6: Set the project for this configuration (after auth is confirmed)
+		if err := gcloud.SetProject(cfg.ProjectID); err != nil {
+			return err
+		}
+		logger.Success("Project set successfully")
 
 		// Update active config
 		store.ActiveConfig = cfg.Name

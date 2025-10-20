@@ -12,6 +12,7 @@ type GCloudConfig struct {
 	Name           string `json:"name"`
 	ProjectID      string `json:"project_id"`
 	ServiceAccount string `json:"service_account,omitempty"`
+	ADCPath        string `json:"adc_path,omitempty"` // Path to stored ADC file
 }
 
 // ConfigStore manages all configurations
@@ -31,6 +32,28 @@ func GetConfigPath() (string, error) {
 		return "", err
 	}
 	return filepath.Join(configDir, "config.json"), nil
+}
+
+// GetADCStoragePath returns the directory where ADC files are stored per configuration
+func GetADCStoragePath() (string, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	adcDir := filepath.Join(homeDir, ".gcloud-switcher", "adc")
+	if err := os.MkdirAll(adcDir, 0755); err != nil { //nolint:gosec
+		return "", err
+	}
+	return adcDir, nil
+}
+
+// GetADCFileForConfig returns the path where ADC should be stored for a specific configuration
+func GetADCFileForConfig(configName string) (string, error) {
+	adcDir, err := GetADCStoragePath()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(adcDir, configName+".json"), nil
 }
 
 // LoadConfigStore loads the configuration store from disk

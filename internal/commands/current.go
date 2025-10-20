@@ -5,6 +5,7 @@ import (
 	"gcloud-switch/internal/config"
 	"gcloud-switch/internal/gcloud"
 	"gcloud-switch/internal/logger"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -19,8 +20,15 @@ var currentCmd = &cobra.Command{
 			return fmt.Errorf("failed to load configurations: %w", err)
 		}
 
+		// Get the actual active gcloud configuration
+		activeGcloudConfig, err := gcloud.GetActiveConfiguration()
+		if err == nil {
+			activeGcloudConfig = strings.TrimSpace(activeGcloudConfig)
+			logger.Info("Active GCloud Configuration", "name", activeGcloudConfig)
+		}
+
 		if store.ActiveConfig == "" {
-			logger.Info("No active configuration set.")
+			logger.Info("No active configuration tracked by gcloud-switcher.")
 			return nil
 		}
 
@@ -29,8 +37,8 @@ var currentCmd = &cobra.Command{
 			return fmt.Errorf("active configuration not found: %w", err)
 		}
 
-		logger.Info("Current Active Configuration:")
-		logger.Info("============================")
+		logger.Info("Current Active Configuration (gcloud-switcher):")
+		logger.Info("================================================")
 		logger.Info("Name", "name", cfg.Name)
 		logger.Info("Project ID", "project_id", cfg.ProjectID)
 		if cfg.ServiceAccount != "" {
@@ -42,7 +50,15 @@ var currentCmd = &cobra.Command{
 		// Also show current gcloud project
 		currentProject, err := gcloud.GetCurrentProject()
 		if err == nil {
+			currentProject = strings.TrimSpace(currentProject)
 			logger.Info("Current GCloud Project", "project", currentProject)
+		}
+
+		// Show if ADC is valid
+		if gcloud.CheckADCValid() {
+			logger.Success("ADC credentials are valid")
+		} else {
+			logger.Warning("ADC credentials are invalid or expired")
 		}
 
 		return nil
