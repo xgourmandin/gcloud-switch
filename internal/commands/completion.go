@@ -1,3 +1,4 @@
+// Package commands contains all CLI command implementations for gcloud-switcher.
 package commands
 
 import (
@@ -7,7 +8,7 @@ import (
 )
 
 // GetConfigNames returns a list of all configuration names for autocompletion
-func GetConfigNames(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+func GetConfigNames(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 	store, err := config.LoadConfigStore()
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp

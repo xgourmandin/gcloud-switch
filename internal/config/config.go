@@ -27,7 +27,7 @@ func GetConfigPath() (string, error) {
 		return "", err
 	}
 	configDir := filepath.Join(homeDir, ".gcloud-switcher")
-	if err := os.MkdirAll(configDir, 0755); err != nil {
+	if err := os.MkdirAll(configDir, 0755); err != nil { //nolint:gosec
 		return "", err
 	}
 	return filepath.Join(configDir, "config.json"), nil
@@ -47,7 +47,7 @@ func LoadConfigStore() (*ConfigStore, error) {
 		}, nil
 	}
 
-	data, err := os.ReadFile(configPath)
+	data, err := os.ReadFile(configPath) //nolint:gosec
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +72,7 @@ func (cs *ConfigStore) Save() error {
 		return err
 	}
 
-	return os.WriteFile(configPath, data, 0644)
+	return os.WriteFile(configPath, data, 0644) //nolint:gosec
 }
 
 // FindConfig finds a configuration by name

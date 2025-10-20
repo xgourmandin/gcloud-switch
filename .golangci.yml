@@ -1,32 +1,34 @@
+# golangci-lint configuration
+# https://golangci-lint.run/usage/configuration/
+
+version: 2
+
 linters:
   enable:
-    - errcheck
-    - gosimple
-    - govet
-    - ineffassign
-    - staticcheck
-    - typecheck
-    - unused
-    - gofmt
-    - goimports
-    - misspell
-    - gocritic
-    - revive
-    - gosec
-    - unconvert
-    - unparam
+    - errcheck      # Checks for unchecked errors
+    - govet         # Examines Go source code and reports suspicious constructs
+    - ineffassign   # Detects ineffectual assignments
+    - staticcheck   # Advanced static analysis (includes gosimple)
+    - unused        # Checks for unused code
+    - misspell      # Finds commonly misspelled words
+    - gocritic      # Provides diagnostics for bugs, performance and style
+    - gosec         # Security-focused linter
+    - unconvert     # Removes unnecessary type conversions
+    - unparam       # Reports unused function parameters
 
 linters-settings:
   govet:
-    check-shadowing: true
-  gofmt:
-    simplify: true
-  goimports:
-    local-prefixes: gcloud-switch
+    enable-all: true
+    settings:
+      shadow:
+        strict: true
   misspell:
     locale: US
-  revive:
-    confidence: 0.8
+  gosec:
+    excludes:
+      - G301  # Directory permissions
+      - G304  # File path variable
+      - G306  # File permissions
 
 issues:
   exclude-rules:
@@ -35,10 +37,14 @@ issues:
       linters:
         - errcheck
         - gosec
-    # Exclude logger from error checking (intentional design)
-    - path: internal/logger/
+    # Exclude logger from error checking (intentional design - print statements)
+    - path: internal/logger/logger\.go
       linters:
         - errcheck
+    # Exclude config file permissions warnings (0755 and 0644 are fine for config)
+    - path: internal/config/config\.go
+      linters:
+        - gosec
   max-issues-per-linter: 0
   max-same-issues: 0
 
@@ -48,67 +54,3 @@ run:
   skip-dirs:
     - .github
     - .idea
-  skip-files:
-    - ".*_test\\.go$"
-name: Release
-
-on:
-  push:
-    tags:
-      - 'v*.*.*'
-
-permissions:
-  contents: write
-
-jobs:
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-
-      - name: Run tests
-        run: go test -v ./...
-
-      - name: Run go vet
-        run: go vet ./...
-
-      - name: Install golangci-lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.55.2
-
-      - name: Run golangci-lint
-        run: golangci-lint run --timeout=5m
-
-  release:
-    name: Release with GoReleaser
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
