@@ -47,10 +47,12 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    format: tar.gz
+    formats:
+      - tar.gz
     format_overrides:
       - goos: windows
-        format: zip
+        formats:
+          - zip
     files:
       - README.md
       - LICENSE
@@ -93,7 +95,7 @@ changelog:
 # Release notes template
 release:
   github:
-    owner: yourusername
+    owner: xgourmandin
     name: gcloud-switch
   draft: false
   prerelease: auto
@@ -107,24 +109,24 @@ release:
     
     #### Homebrew (macOS/Linux)
     ```bash
-    brew install yourusername/tap/gcloud-switcher
+    brew install xgourmandin/tap/gcloud-switcher
     ```
     
     #### Scoop (Windows)
     ```powershell
-    scoop bucket add yourusername https://github.com/yourusername/scoop-bucket
+    scoop bucket add xgourmandin https://github.com/xgourmandin/scoop-bucket
     scoop install gcloud-switcher
     ```
     
     #### Go Install
     ```bash
-    go install github.com/yourusername/gcloud-switch/cmd/gcloud-switcher@{{ .Version }}
+    go install github.com/xgourmandin/gcloud-switch/cmd/gcloud-switcher@{{ .Version }}
     ```
     
     #### Manual Download
     Download the appropriate binary for your platform from the assets below.
   footer: |
-    **Full Changelog**: https://github.com/yourusername/gcloud-switch/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/xgourmandin/gcloud-switch/compare/{{ .PreviousTag }}...{{ .Tag }}
     
     ---
     
@@ -142,4 +144,4 @@ release:
     gcloud-switcher completion fish > ~/.config/fish/completions/gcloud-switcher.fish
     ```
     
-    See [COMPLETION.md](https://github.com/yourusername/gcloud-switch/blob/main/COMPLETION.md) for detailed setup instructions.
+    See [COMPLETION.md](https://github.com/xgourmandin/gcloud-switch/blob/main/COMPLETION.md) for detailed setup instructions.

@@ -1,8 +1,8 @@
 # GCloud Switcher
 
-[![CI](https://github.com/yourusername/gcloud-switch/workflows/CI/badge.svg)](https://github.com/yourusername/gcloud-switch/actions)
-[![Release](https://github.com/yourusername/gcloud-switch/workflows/Release/badge.svg)](https://github.com/yourusername/gcloud-switch/releases)
-[![Go Report Card](https://goreportcard.com/badge/github.com/yourusername/gcloud-switch)](https://goreportcard.com/report/github.com/yourusername/gcloud-switch)
+[![CI](https://github.com/xgourmandin/gcloud-switch/workflows/CI/badge.svg)](https://github.com/xgourmandin/gcloud-switch/actions)
+[![Release](https://github.com/xgourmandin/gcloud-switch/workflows/Release/badge.svg)](https://github.com/xgourmandin/gcloud-switch/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xgourmandin/gcloud-switch)](https://goreportcard.com/report/github.com/xgourmandin/gcloud-switch)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A CLI tool to simplify switching between multiple GCloud configurations and projects.
@@ -16,25 +16,25 @@ The main pain with GCloud when working on multiple organizations/projects is swi
 ### Homebrew (macOS/Linux)
 
 ```bash
-brew install yourusername/tap/gcloud-switcher
+brew install xgourmandin/tap/gcloud-switcher
 ```
 
 ### Scoop (Windows)
 
 ```powershell
-scoop bucket add yourusername https://github.com/yourusername/scoop-bucket
+scoop bucket add xgourmandin https://github.com/xgourmandin/scoop-bucket
 scoop install gcloud-switcher
 ```
 
 ### Go Install
 
 ```bash
-go install github.com/yourusername/gcloud-switch/cmd/gcloud-switcher@latest
+go install github.com/xgourmandin/gcloud-switch/cmd/gcloud-switcher@latest
 ```
 
 ### Download Binary
 
-Download the latest release for your platform from the [releases page](https://github.com/yourusername/gcloud-switch/releases).
+Download the latest release for your platform from the [releases page](https://github.com/xgourmandin/gcloud-switch/releases).
 
 Available for:
 - **Linux**: amd64, arm64, armv6, armv7
@@ -44,14 +44,14 @@ Available for:
 ### Docker
 
 ```bash
-docker pull yourusername/gcloud-switcher:latest
-docker run --rm -v ~/.gcloud-switcher:/root/.gcloud-switcher yourusername/gcloud-switcher list
+docker pull xgourmandin/gcloud-switcher:latest
+docker run --rm -v ~/.gcloud-switcher:/root/.gcloud-switcher xgourmandin/gcloud-switcher list
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/gcloud-switch.git
+git clone https://github.com/xgourmandin/gcloud-switch.git
 cd gcloud-switch
 go build -o gcloud-switcher ./cmd/gcloud-switcher
 sudo mv gcloud-switcher /usr/local/bin/
@@ -178,7 +178,7 @@ The tool intelligently handles authentication:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/gcloud-switch.git
+git clone https://github.com/xgourmandin/gcloud-switch.git
 cd gcloud-switch
 
 # Download dependencies

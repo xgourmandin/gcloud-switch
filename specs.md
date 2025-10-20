@@ -14,7 +14,7 @@ Instead of going through the classcial `gcloud config set project <project-id>` 
 ## Installation
 To install the CLI tool, run:
 ```bash
-go install github.com/yourusername/gcloud-switcher@latest
+go install github.com/xgourmandin/gcloud-switcher@latest
 ```
 
 ## Usage
