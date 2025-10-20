@@ -42,15 +42,7 @@ jobs:
         run: go mod download
 
       - name: Run tests
-        run: go test -v -race -coverprofile=coverage.out -covermode=atomic ./...
-
-      - name: Upload coverage to Codecov
-        if: matrix.os == 'ubuntu-latest' && matrix.go-version == '1.25'
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.out
-          flags: unittests
-          name: codecov-umbrella
+        run: go test -v -race ./...
 
       - name: Run go vet
         run: go vet ./...
