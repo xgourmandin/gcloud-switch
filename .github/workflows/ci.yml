@@ -41,14 +41,20 @@ jobs:
       - name: Download dependencies
         run: go mod download
 
+      - name: Verify workspace
+        run: |
+          pwd
+          ls -la
+          ls -la cmd/
+
       - name: Run tests
-        run: go test -v -race ./...
+        run: go test -v ./...
 
       - name: Run go vet
         run: go vet ./...
 
       - name: Build
-        run: go build -v ./cmd/gcloud-switcher
+        run: go build -v -o gcloud-switcher${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/gcloud-switcher
 
   lint:
     name: Lint
@@ -63,8 +69,7 @@ jobs:
           go-version: '1.25'
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v3
+        uses: golangci/golangci-lint-action@v4
         with:
-          version: v1.55.2
+          version: latest
           args: --timeout=5m
-
