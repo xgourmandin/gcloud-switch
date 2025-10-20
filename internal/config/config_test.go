@@ -28,8 +28,10 @@ func TestConfigStoreSaveAndLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
-	defer os.RemoveAll(tempDir)
+	defer os.RemoveAll(tempDir) //nolint:errcheck
+
 	configPath := filepath.Join(tempDir, "config.json")
+
 	store := &ConfigStore{
 		Configurations: []GCloudConfig{
 			{
@@ -44,15 +46,18 @@ func TestConfigStoreSaveAndLoad(t *testing.T) {
 		},
 		ActiveConfig: "dev",
 	}
+
 	data, err := json.MarshalIndent(store, "", "  ")
 	if err != nil {
 		t.Fatalf("Failed to marshal config: %v", err)
 	}
-	err = os.WriteFile(configPath, data, 0644)
+
+	err = os.WriteFile(configPath, data, 0644) //nolint:gosec
 	if err != nil {
 		t.Fatalf("Failed to write config file: %v", err)
 	}
-	loadedData, err := os.ReadFile(configPath)
+
+	loadedData, err := os.ReadFile(configPath) //nolint:gosec
 	if err != nil {
 		t.Fatalf("Failed to read config file: %v", err)
 	}

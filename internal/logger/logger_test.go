@@ -15,11 +15,11 @@ func captureOutput(f func()) string {
 
 	f()
 
-	w.Close()
+	_ = w.Close() //nolint:errcheck
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r) //nolint:errcheck
 	return buf.String()
 }
 
@@ -30,11 +30,11 @@ func captureErrorOutput(f func()) string {
 
 	f()
 
-	w.Close()
+	_ = w.Close() //nolint:errcheck
 	os.Stderr = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r) //nolint:errcheck
 	return buf.String()
 }
 

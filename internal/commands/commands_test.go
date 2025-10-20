@@ -27,11 +27,11 @@ func captureStdout(f func()) string {
 
 	f()
 
-	w.Close()
+	_ = w.Close() //nolint:errcheck
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r) //nolint:errcheck
 	return buf.String()
 }
 
@@ -123,10 +123,8 @@ func TestGetConfigNamesWithNoConfig(t *testing.T) {
 		names = []string{}
 	}
 
-	// Just checking it doesn't panic
-	if len(names) < 0 {
-		t.Error("Invalid names length")
-	}
+	// Just checking it doesn't panic - length should be non-negative
+	_ = names // Use names to avoid unused variable warning
 }
 
 func TestAddCommandFlags(t *testing.T) {
@@ -134,6 +132,7 @@ func TestAddCommandFlags(t *testing.T) {
 	projectFlag := addCmd.Flags().Lookup("project")
 	if projectFlag == nil {
 		t.Error("Expected 'project' flag to exist on add command")
+		return
 	}
 	if projectFlag.Shorthand != "p" {
 		t.Errorf("Expected 'project' flag shorthand to be 'p', got '%s'", projectFlag.Shorthand)
@@ -142,6 +141,7 @@ func TestAddCommandFlags(t *testing.T) {
 	saFlag := addCmd.Flags().Lookup("service-account")
 	if saFlag == nil {
 		t.Error("Expected 'service-account' flag to exist on add command")
+		return
 	}
 	if saFlag.Shorthand != "s" {
 		t.Errorf("Expected 'service-account' flag shorthand to be 's', got '%s'", saFlag.Shorthand)
