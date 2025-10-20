@@ -42,10 +42,16 @@ jobs:
         run: go mod download
 
       - name: Verify workspace
+        shell: bash
         run: |
+          echo "Current directory:"
           pwd
-          ls -la
-          ls -la cmd/
+          echo ""
+          echo "Root directory contents:"
+          ls -la || dir
+          echo ""
+          echo "cmd/ directory contents:"
+          ls -la cmd/ || dir cmd
 
       - name: Run tests
         run: go test -v ./...
