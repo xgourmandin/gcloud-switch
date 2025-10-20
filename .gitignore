@@ -4,7 +4,6 @@
 *.dll
 *.so
 *.dylib
-gcloud-switcher
 
 # Test binary, built with `go test -c`
 *.test
@@ -29,3 +28,4 @@ go.work
 .DS_Store
 Thumbs.db
 
+/gcloud-switcher
