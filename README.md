@@ -13,19 +13,6 @@ The main pain with GCloud when working on multiple organizations/projects is swi
 
 ## Installation
 
-### Homebrew (macOS/Linux)
-
-```bash
-brew install xgourmandin/tap/gcloud-switch
-```
-
-### Scoop (Windows)
-
-```powershell
-scoop bucket add xgourmandin https://github.com/xgourmandin/scoop-bucket
-scoop install gcloud-switcher
-```
-
 ### Go Install
 
 ```bash
@@ -41,21 +28,6 @@ Available for:
 - **macOS**: amd64 (Intel), arm64 (Apple Silicon)
 - **Windows**: amd64
 
-### Docker
-
-```bash
-docker pull xgourmandin/gcloud-switch:latest
-docker run --rm -v ~/.gcloud-switch:/root/.gcloud-switch xgourmandin/gcloud-switch list
-```
-
-### From Source
-
-```bash
-git clone https://github.com/xgourmandin/gcloud-switch.git
-cd gcloud-switch
-go build -o gcloud-switch ./cmd/gcloud-switch
-sudo mv gcloud-switch /usr/local/bin/
-```
 
 ## Features
 
