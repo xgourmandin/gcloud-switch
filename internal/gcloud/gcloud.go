@@ -101,22 +101,6 @@ func RestoreADC(sourcePath string) (err error) {
 	return nil
 }
 
-// DeleteADC removes the current ADC file
-func DeleteADC() error {
-	adcPath, err := GetADCPath()
-	if err != nil {
-		return err
-	}
-
-	// Check if ADC file exists
-	if _, err := os.Stat(adcPath); os.IsNotExist(err) {
-		// No ADC file to delete
-		return nil
-	}
-
-	return os.Remove(adcPath)
-}
-
 // ActivateConfiguration activates a gcloud configuration by name
 func ActivateConfiguration(configName string) error {
 	cmd := exec.Command("gcloud", "config", "configurations", "activate", configName) // #nosec G204 -- configName is a validated gcloud configuration name.
@@ -152,16 +136,6 @@ func GetActiveConfiguration() (string, error) {
 		return "", fmt.Errorf("failed to get active configuration: %w", err)
 	}
 	return string(output), nil
-}
-
-// GetAccountFromConfiguration gets the account from a specific gcloud configuration
-func GetAccountFromConfiguration(configName string) (string, error) {
-	cmd := exec.Command("gcloud", "config", "configurations", "describe", configName, "--format=value(properties.core.account)") // #nosec G204 -- configName is a validated gcloud configuration name.
-	output, err := cmd.Output()
-	if err != nil {
-		return "", fmt.Errorf("failed to get account from configuration: %w", err)
-	}
-	return strings.TrimSpace(string(output)), nil
 }
 
 // GetProjectFromConfiguration gets the project ID from a specific gcloud configuration
