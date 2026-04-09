@@ -28,7 +28,7 @@ var currentCmd = &cobra.Command{
 		}
 
 		if store.ActiveConfig == "" {
-			logger.Info("No active configuration tracked by gcloud-switcher.")
+			logger.Info("No active configuration tracked by gcloud-switch.")
 			return nil
 		}
 
@@ -37,7 +37,7 @@ var currentCmd = &cobra.Command{
 			return fmt.Errorf("active configuration not found: %w", err)
 		}
 
-		logger.Info("Current Active Configuration (gcloud-switcher):")
+		logger.Info("Current Active Configuration (gcloud-switch):")
 		logger.Info("================================================")
 		logger.Info("Name", "name", cfg.Name)
 		logger.Info("Project ID", "project_id", cfg.ProjectID)

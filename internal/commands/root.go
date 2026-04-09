@@ -8,7 +8,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "gcloud-switcher",
+	Use:   "gcloud-switch",
 	Short: "A CLI tool to simplify switching between GCloud configurations",
 	Long: `GCloud Switcher helps you manage multiple GCloud configurations and 
 switch between them effortlessly. Instead of manually running multiple 

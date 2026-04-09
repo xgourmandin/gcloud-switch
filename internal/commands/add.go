@@ -121,7 +121,7 @@ same name already exists, it will be imported.`,
 		if serviceAccount != "" {
 			logger.Info("  Service Account", "service_account", serviceAccount)
 		} else if configExists {
-			logger.Info("  No service account set. Use 'gcloud-switcher edit " + configName + "' to add one if needed.")
+			logger.Info("  No service account set. Use 'gcloud-switch edit " + configName + "' to add one if needed.")
 		}
 
 		return nil

@@ -1,4 +1,4 @@
-# GoReleaser configuration for gcloud-switcher
+# GoReleaser configuration for gcloud-switch
 # See: https://goreleaser.com
 
 version: 2
@@ -9,9 +9,9 @@ before:
     - go mod tidy
 
 builds:
-  - id: gcloud-switcher
-    main: ./cmd/gcloud-switcher
-    binary: gcloud-switcher
+  - id: gcloud-switch
+    main: ./cmd/gcloud-switch
+    binary: gcloud-switch
     env:
       - CGO_ENABLED=0
     goos:
@@ -39,7 +39,7 @@ builds:
       - -X main.builtBy=goreleaser
 
 archives:
-  - id: gcloud-switcher-archive
+  - id: gcloud-switch-archive
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -107,20 +107,23 @@ release:
     
     ### Installation
     
-    #### Homebrew (macOS/Linux)
-    ```bash
-    brew install xgourmandin/tap/gcloud-switcher
-    ```
-    
-    #### Scoop (Windows)
-    ```powershell
-    scoop bucket add xgourmandin https://github.com/xgourmandin/scoop-bucket
-    scoop install gcloud-switcher
-    ```
-    
     #### Go Install
     ```bash
     go install github.com/xgourmandin/gcloud-switch/cmd/gcloud-switcher@{{ .Version }}
+    ```
+    
+    ### Auto completion
+    To enable auto completion, run the following command in your terminal:
+    
+    To install the completion script for Bash for every sessions, use:
+    ```bash
+    # Write the completion script
+    gcloud-switch completion bash > ~/.bash_completion.d/gcloud-switch
+    ```
+    
+    If yo want to load completions for the current session, run:
+    ```bash
+    source <(gcloud-switch completion bash)
     ```
     
     #### Manual Download

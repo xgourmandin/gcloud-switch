@@ -1,4 +1,4 @@
-// Package commands contains all CLI command implementations for gcloud-switcher.
+// Package commands contains all CLI command implementations for gcloud-switch.
 package commands
 
 import (

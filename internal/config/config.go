@@ -27,7 +27,7 @@ func GetConfigPath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	configDir := filepath.Join(homeDir, ".gcloud-switcher")
+	configDir := filepath.Join(homeDir, ".gcloud-switch")
 	if err := os.MkdirAll(configDir, 0755); err != nil { //nolint:gosec
 		return "", err
 	}
@@ -40,7 +40,7 @@ func GetADCStoragePath() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	adcDir := filepath.Join(homeDir, ".gcloud-switcher", "adc")
+	adcDir := filepath.Join(homeDir, ".gcloud-switch", "adc")
 	if err := os.MkdirAll(adcDir, 0755); err != nil { //nolint:gosec
 		return "", err
 	}

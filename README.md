@@ -16,7 +16,7 @@ The main pain with GCloud when working on multiple organizations/projects is swi
 ### Homebrew (macOS/Linux)
 
 ```bash
-brew install xgourmandin/tap/gcloud-switcher
+brew install xgourmandin/tap/gcloud-switch
 ```
 
 ### Scoop (Windows)
@@ -29,7 +29,7 @@ scoop install gcloud-switcher
 ### Go Install
 
 ```bash
-go install github.com/xgourmandin/gcloud-switch/cmd/gcloud-switcher@latest
+go install github.com/xgourmandin/gcloud-switch/cmd/gcloud-switch@latest
 ```
 
 ### Download Binary
@@ -44,8 +44,8 @@ Available for:
 ### Docker
 
 ```bash
-docker pull xgourmandin/gcloud-switcher:latest
-docker run --rm -v ~/.gcloud-switcher:/root/.gcloud-switcher xgourmandin/gcloud-switcher list
+docker pull xgourmandin/gcloud-switch:latest
+docker run --rm -v ~/.gcloud-switch:/root/.gcloud-switch xgourmandin/gcloud-switch list
 ```
 
 ### From Source
@@ -53,8 +53,8 @@ docker run --rm -v ~/.gcloud-switcher:/root/.gcloud-switcher xgourmandin/gcloud-
 ```bash
 git clone https://github.com/xgourmandin/gcloud-switch.git
 cd gcloud-switch
-go build -o gcloud-switcher ./cmd/gcloud-switcher
-sudo mv gcloud-switcher /usr/local/bin/
+go build -o gcloud-switch ./cmd/gcloud-switch
+sudo mv gcloud-switch /usr/local/bin/
 ```
 
 ## Features
@@ -72,16 +72,16 @@ sudo mv gcloud-switcher /usr/local/bin/
 
 ```bash
 # Add a configuration
-gcloud-switcher add dev-config -p my-dev-project-123
+gcloud-switch add dev-config -p my-dev-project-123
 
 # List all configurations
-gcloud-switcher list
+gcloud-switch list
 
 # Switch to a configuration
-gcloud-switcher switch dev-config
+gcloud-switch switch dev-config
 
 # View current configuration
-gcloud-switcher current
+gcloud-switch current
 ```
 
 ## Usage
@@ -90,22 +90,22 @@ gcloud-switcher current
 
 ```bash
 # Interactive mode
-gcloud-switcher add myconfig
+gcloud-switch add myconfig
 
 # With flags
-gcloud-switcher add myconfig -p my-project-id -s my-sa@project.iam.gserviceaccount.com
+gcloud-switch add myconfig -p my-project-id -s my-sa@project.iam.gserviceaccount.com
 ```
 
 ### List all configurations
 
 ```bash
-gcloud-switcher list
+gcloud-switch list
 ```
 
 ### Switch to a configuration
 
 ```bash
-gcloud-switcher switch myconfig
+gcloud-switch switch myconfig
 ```
 
 The switch command will:
@@ -118,22 +118,22 @@ The switch command will:
 
 ```bash
 # Interactive mode
-gcloud-switcher edit myconfig
+gcloud-switch edit myconfig
 
 # With flags
-gcloud-switcher edit myconfig -p new-project-id
+gcloud-switch edit myconfig -p new-project-id
 ```
 
 ### Remove a configuration
 
 ```bash
-gcloud-switcher remove myconfig
+gcloud-switch remove myconfig
 ```
 
 ### View current active configuration
 
 ```bash
-gcloud-switcher current
+gcloud-switch current
 ```
 
 ## Shell Autocompletion
@@ -144,16 +144,16 @@ GCloud Switcher supports **dynamic autocompletion** for configuration names!
 
 ```bash
 # Bash
-gcloud-switcher completion bash | sudo tee /etc/bash_completion.d/gcloud-switcher
+gcloud-switch completion bash | sudo tee /etc/bash_completion.d/gcloud-switch
 
 # Zsh
-gcloud-switcher completion zsh > "${fpath[1]}/_gcloud-switcher"
+gcloud-switch completion zsh > "${fpath[1]}/_gcloud-switcher"
 
 # Fish
-gcloud-switcher completion fish > ~/.config/fish/completions/gcloud-switcher.fish
+gcloud-switch completion fish > ~/.config/fish/completions/gcloud-switch.fish
 
 # PowerShell
-gcloud-switcher completion powershell | Out-String | Invoke-Expression
+gcloud-switch completion powershell | Out-String | Invoke-Expression
 ```
 
 ## Configuration Storage
@@ -186,10 +186,10 @@ go mod download
 go test ./...
 
 # Build
-go build -o gcloud-switcher ./cmd/gcloud-switcher
+go build -o gcloud-switch ./cmd/gcloud-switch
 
 # Install
-sudo mv gcloud-switcher /usr/local/bin/
+sudo mv gcloud-switch /usr/local/bin/
 ```
 
 ## Contributing

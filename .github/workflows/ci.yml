@@ -60,7 +60,7 @@ jobs:
         run: go vet ./...
 
       - name: Build
-        run: go build -v -o gcloud-switcher${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/gcloud-switcher
+        run: go build -v -o gcloud-switch${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./cmd/gcloud-switch
 
   lint:
     name: Lint

@@ -24,7 +24,7 @@ func TestGCloudConfig(t *testing.T) {
 	}
 }
 func TestConfigStoreSaveAndLoad(t *testing.T) {
-	tempDir, err := os.MkdirTemp("", "gcloud-switcher-test-*")
+	tempDir, err := os.MkdirTemp("", "gcloud-switch-test-*")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

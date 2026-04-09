@@ -19,7 +19,7 @@ var listCmd = &cobra.Command{
 		}
 
 		if len(store.Configurations) == 0 {
-			logger.Info("No configurations found. Use 'gcloud-switcher add' to create one.")
+			logger.Info("No configurations found. Use 'gcloud-switch add' to create one.")
 			return nil
 		}
 

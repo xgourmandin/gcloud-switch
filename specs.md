@@ -14,18 +14,18 @@ Instead of going through the classcial `gcloud config set project <project-id>` 
 ## Installation
 To install the CLI tool, run:
 ```bash
-go install github.com/xgourmandin/gcloud-switcher@latest
+go install github.com/xgourmandin/gcloud-switch@latest
 ```
 
 ## Usage
 After installation, you can use the CLI tool with the following commands:
 ```bash
-gcloud-switcher list               # List all available configurations
-gcloud-switcher switch <name>      # Switch to the specified configuration
-gcloud-switcher add <name>         # Add a new configuration
-gcloud-switcher edit <name>        # Edit an existing configuration
-gcloud-switcher remove <name>      # Remove an existing configuration
-gcloud-switcher current            # Show the current active configuration
+gcloud-switch list               # List all available configurations
+gcloud-switch switch <name>      # Switch to the specified configuration
+gcloud-switch add <name>         # Add a new configuration
+gcloud-switch edit <name>        # Edit an existing configuration
+gcloud-switch remove <name>      # Remove an existing configuration
+gcloud-switch current            # Show the current active configuration
 ```
 
 ## Features details

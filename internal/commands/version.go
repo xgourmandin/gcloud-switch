@@ -1,4 +1,4 @@
-// Package commands contains all CLI command implementations for gcloud-switcher.
+// Package commands contains all CLI command implementations for gcloud-switch.
 package commands
 
 import (
@@ -21,9 +21,9 @@ var (
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print version information",
-	Long:  "Display version, commit, and build information for gcloud-switcher.",
+	Long:  "Display version, commit, and build information for gcloud-switch.",
 	Run: func(_ *cobra.Command, _ []string) {
-		fmt.Printf("gcloud-switcher version %s\n", Version)
+		fmt.Printf("gcloud-switch version %s\n", Version)
 		fmt.Printf("  commit: %s\n", Commit)
 		fmt.Printf("  built at: %s\n", Date)
 		fmt.Printf("  built by: %s\n", BuiltBy)

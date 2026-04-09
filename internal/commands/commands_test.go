@@ -41,8 +41,8 @@ func TestRootCommand(t *testing.T) {
 		t.Errorf("Unexpected error: %v", err)
 	}
 
-	if !strings.Contains(output, "gcloud-switcher") {
-		t.Errorf("Expected output to contain 'gcloud-switcher', got: %s", output)
+	if !strings.Contains(output, "gcloud-switch") {
+		t.Errorf("Expected output to contain 'gcloud-switch', got: %s", output)
 	}
 
 	if !strings.Contains(output, "GCloud Switcher") {
